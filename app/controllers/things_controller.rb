@@ -54,6 +54,10 @@ class ThingsController < ApplicationController
     head :no_content
   end
 
+  def add_member
+
+  end
+
   private
 
     def set_thing

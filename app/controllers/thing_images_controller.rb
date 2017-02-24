@@ -10,7 +10,7 @@ class ThingImagesController < ApplicationController
   #after_action :verify_policy_scoped, only: [:linkable_things]
 
   def index
-    authorize @thing, :get_images?
+    authorize @thing, :get_service_offering?
     @thing_images = @thing.thing_images.prioritized.with_caption
   end
 
