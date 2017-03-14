@@ -19,8 +19,7 @@
       bindings: {
         authz: "<"
       }
-    })
-    ;
+    });
 
 
   thingEditorTemplateUrl.$inject = ["spa-demo.config.APP_CONFIG"];

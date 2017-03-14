@@ -1,0 +1,27 @@
+<div class="thing-list" ng-show="$ctrl.authz.canQuery">
+
+  <ul>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Thing</th>
+      </tr>
+      <tr ng-repeat="item in $ctrl.items">
+        <td>
+          <a ui-sref="service-offerings({id:item.id})">
+            <span class="service_offering_id id">{{item.id}}</span>
+            {{item.name}}
+            <span ng-show="$ctrl.authz.canUpdateItem(item)"> *</span>
+          </a>
+        </td>
+        <td>
+          {{item.description}}
+        </td>
+        <td>
+          {{item.thing_name}}
+        </td>
+      </tr>
+    </table>
+  </ul>
+</div>

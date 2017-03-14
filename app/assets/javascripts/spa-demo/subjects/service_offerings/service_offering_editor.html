@@ -1,0 +1,61 @@
+<form class="service-offering-form row" name="serviceofferingform">
+  <span class="iservice-offering_id id">{{$ctrl.item.id}}</span>
+  <span class="invalid">{{$ctrl.item.errors.full_messages}}</span>
+
+  <div class="service-offering-name row col-lg-12">
+    <label class="col-xs-3">Name:</label>
+    <input class="col-xs-9"
+           name="service-offering-name"
+           ng-model="$ctrl.item.name"
+           ng-readonly="!$ctrl.authz.canUpdate"
+           maxlength="80"
+           pattern=".{3,}" title="3 character minimum for Name"/>
+    <span class="invalid">{{$ctrl.item.errors.name}}</span>
+  </div>
+  <div class="service-offering-description row col-lg-12">
+    <label class="col-xs-3">description:</label>
+    <textarea class="col-xs-9"
+           name="service-offering-description"
+           ng-model="$ctrl.item.description"
+           ng-readonly="!$ctrl.authz.canUpdate"
+           maxlength="80"
+           pattern=".{3,}" title="3 character minimum for Description"/>
+    <span class="invalid">{{$ctrl.item.errors.desription}}</span>
+  </div>
+
+  <div class="linkable-things row col-lg-12"
+       ng-show="$ctrl.linkable_things.length>0 &&
+                $ctrl.authz.authenticated">
+    <label class="col-xs-3">Linkable Things:</label>
+    <div class="link-things" class="col-xs-9">
+      <select name="linkable-things"
+              ng-model="$ctrl.selected_linkables"
+              multiple>
+        <option ng-repeat="thing in $ctrl.linkable_things | orderBy:'name'"
+                value="{{thing.id}}">{{thing.name}}</option>
+      </select>
+    </div>
+    <span class="invalid">{{$ctrl.item.errors.linkable_things}}</span>
+  </div>
+
+  <div class="service-offering-controls">
+    <span ng-show="$ctrl.authz.authenticated">
+      <button name="service-offering-create"
+              ng-show="!$ctrl.item.id && $ctrl.authz.canCreate"
+              type="submit"
+              ng-disabled="service-offeringform.$invalid"
+              ng-click="$ctrl.create()">Create Service Offering</button>
+      <span ng-show="$ctrl.item.id">
+        <button name="service-offering-update"
+                type="submit"
+                ng-show="$ctrl.authz.canUpdate"
+                ng-disabled="!service-offeringform.$dirty"
+                ng-click="$ctrl.update()">Update Service Offering</button>
+        <button name="service-offering-delete"
+                type="submit"
+                ng-show="$ctrl.authz.canDelete"
+                ng-click="$ctrl.remove()">Delete Service Offering</button>
+      </span>
+    </span>
+  </div>
+</form>

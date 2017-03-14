@@ -45,3 +45,9 @@
 //= require spa-demo/subjects/things/things_authz.service
 //= require spa-demo/subjects/things/things_authz.directive
 //= require spa-demo/subjects/things/things.component
+//= require spa-demo/subjects/service_offerings/service_offering.service
+//= require spa-demo/subjects/service_offerings/service_offering_thing.service
+//= require spa-demo/subjects/service_offerings/service_offering_linkable_thing.service.js
+//= require spa-demo/subjects/service_offerings/service_offerings_authz.service
+//= require spa-demo/subjects/service_offerings/service_offerings_authz.directive
+//= require spa-demo/subjects/service_offerings/service_offerings.component
