@@ -4,7 +4,7 @@ class CreateServiceOfferings < ActiveRecord::Migration
       t.references :thing, index: true, foreign_key: true
       t.string :name
       t.text :description
-
+      t.integer :creator_id, {null:false}
       t.timestamps null: false
     end
   end

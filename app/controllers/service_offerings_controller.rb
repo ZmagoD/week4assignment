@@ -4,20 +4,32 @@ class ServiceOfferingsController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update, :destroy]
 
 	def index
-		#authorize @thing, :get_images?
-		p params
-		if params[:thing_id]
-			@service_offerings = ServiceOffering.of_thing(params.fetch(:thing_id))
-		else
-			@service_offerings = ServiceOffering.all
-		end
+		authorize ServiceOffering
+		@service_offerings = policy_scope(ServiceOffering.all)
+		@service_offerings = ServiceOfferingPolicy.merge(@service_offerings)
 	end
 
 	def create
-		service = ServiceOffering.new(service_offering_params)
-		if service.save
-			@thing.service_offerings << service
+		authorize ServiceOffering
+		@service = ServiceOffering.new(service_offering_params)
+		@service.creator_id = current_user.id
+
+		User.transaction do
+			if @service.save
+				role=current_user.add_role(Role::ORGANIZER, @service)
+				@service.user_roles << role.role_name
+				role.save!
+				render :show, status: :created, location: @service
+			else
+				render json: {errors:@service.errors.messages}, status: :unprocessable_entity
+			end
 		end
+	end
+
+	def show
+		authorize @service_offering
+		service = policy_scope(ServiceOffering.where(:id=>@service_offering.id))
+		@service = ServiceOfferingPolicy.merge(service).first
 	end
 
 	def update
@@ -30,8 +42,9 @@ class ServiceOfferingsController < ApplicationController
 
   def linkable_things
 	  # authorize Thing, :get_linkables?
+		p params
 	  service_offering = Image.find(params[:service_offerings_id])
-	  @things=Thing.not_linked_se(service_offering)
+	  @things = Thing.not_linked_se(service_offering)
 	  # @things=ThingPolicy::Scope.new(current_user,@things).user_roles(true,false)
 	  # @things=ThingPolicy.merge(@things)
 	  render "things/index"

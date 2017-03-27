@@ -35,9 +35,10 @@
                                    "$state","$stateParams",
                                    "spa-demo.authz.Authz",
                                    "spa-demo.subjects.Thing",
-                                   "spa-demo.subjects.ThingImage"];
+                                   "spa-demo.subjects.ThingImage",
+                                   "spa-demo.subjects.ThingServiceOffering"];
   function ThingEditorController($scope, $q, $state, $stateParams, 
-                                 Authz, Thing, ThingImage) {
+                                 Authz, Thing, ThingImage, ThingServiceOffering) {
     var vm=this;
     vm.create = create;
     vm.clear  = clear;
@@ -60,6 +61,8 @@
 
     return;
     //////////////
+
+
     function newResource() {
       vm.item = new Thing();
       vm.thingsAuthz.newItem(vm.item);
@@ -70,6 +73,7 @@
       var itemId = thingId ? thingId : vm.item.id;      
       console.log("re/loading thing", itemId);
       vm.images = ThingImage.query({thing_id:itemId});
+      vm.service_offerings = ThingServiceOffering.query({thing_id:itemId});
       vm.item = Thing.get({id:itemId});
       vm.thingsAuthz.newItem(vm.item);
       vm.images.$promise.then(
@@ -78,7 +82,15 @@
             ti.originalPriority = ti.priority;            
           });                     
         });
-      $q.all([vm.item.$promise,vm.images.$promise]).catch(handleError);
+      vm.service_offerings.$promise.then(
+          function() {
+              angular.forEach(vm.images, function(ti) {
+                  ti.originalPriority = ti.priority;
+              })
+          }
+
+      )
+      $q.all([vm.item.$promise,vm.images.$promise, vm.service_offerings.$promise]).catch(handleError);
     }
     function haveDirtyLinks() {
       for (var i=0; vm.images && i<vm.images.length; i++) {

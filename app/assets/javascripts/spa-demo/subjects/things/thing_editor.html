@@ -73,6 +73,18 @@
     <span class="invalid">{{$ctrl.item.errors.images}}</span>
   </div>
 
+  <div class="thing-se" ng-show="$ctrl.service_offerings.length > 0">
+      <div class="form-group">
+          <label for="se-list">Service Offering:</label>
+          <select class="form-control"
+                  name="thing-se"
+                  id="se-list"
+                  ng-show="$ctrl.authz.canAddServiceOffering">
+              <option ng-repeat="se in $ctrl.service_offerings"
+                      value="{{se.id}}">{{se.name}}</option>
+          </select>
+      </div>
+  </div>
   <div class="thing-controls"
        ng-show="$ctrl.authz.authenticated">
     <button ng-show="!$ctrl.item.id && $ctrl.authz.canCreate"
@@ -92,7 +104,8 @@
                 data-ng-hide="$ctrl.haveDirtyLinks() &&
                   (!thingform['thing-name'].$dirty && 
                    !thingform['thing-desc'].$dirty && 
-                   !thingform['thing-notes'].$dirty)"
+                   !thingform['thing-notes'].$dirty) &&
+                   !thingform['thing-se'].$dirty"
                 ng-click="$ctrl.update()">Update Thing</button>
         <button name="thing-images-update"
                 type="submit"          

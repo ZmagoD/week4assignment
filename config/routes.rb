@@ -15,8 +15,9 @@ Rails.application.routes.draw do
     end
     resources :things, except: [:new, :edit] do
       resources :thing_images, only: [:index, :create, :update, :destroy]
+      resources :service_offerings, only: [:index, :create, :update, :destroy]
     end
-	  resources :service_offerings
+	  resources :service_offerings, except: :show
     get "service_offerings/:service_offerings_id/linkable_things",
         controller: :service_offerings, action: :linkable_things
   end      
